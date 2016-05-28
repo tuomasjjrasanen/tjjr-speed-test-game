@@ -170,8 +170,15 @@ class ButtonPanel(QWidget):
         blueButton.setOn()
         yellowButton.setOn()
 
+        scoreCounter = QLabel("0")
+        font = QFont()
+        font.setPointSize(48)
+        scoreCounter.setFont(font)
+        scoreCounter.setAlignment(Qt.AlignCenter)
+
         topRowLayout.addWidget(redButton)
         middleRowLayout.addWidget(greenButton)
+        middleRowLayout.addWidget(scoreCounter)
         middleRowLayout.addWidget(blueButton)
         bottomRowLayout.addWidget(yellowButton)
 
