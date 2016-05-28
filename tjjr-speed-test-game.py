@@ -170,6 +170,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.setCentralWidget(ButtonPanel())
+
 def main():
     app = QApplication(sys.argv)
 
