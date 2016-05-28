@@ -76,6 +76,75 @@ class GraphicsGlowEffect(QGraphicsEffect):
 
         return pixmap
 
+class ColorLedButton(QPushButton):
+
+    def __init__(self, color):
+        super().__init__()
+
+        self.__color = color
+        colorName = color.name()
+        darkerColorName = color.darker().name()
+        lighterColorName = color.lighter().name()
+        self.setStyleSheet("""
+ColorLedButton {
+ background    : qlineargradient(x1:0, y1:-0.5, x2:0, y2:1.3,
+                                 stop:0 %s, stop: 1 %s);
+ border-style  : solid;
+ border-width  : 1px;
+ border-radius : 50px;
+ border-color  : black;
+ max-width     : 100px;
+ max-height    : 100px;
+ min-width     : 100px;
+ min-height    : 100px;
+}
+
+ColorLedButton:pressed {
+ background    : qlineargradient(x1:0, y1:0, x2:0, y2:3,
+                                 stop:0 %s, stop: 1 %s);
+ border-style  : solid;
+ border-width  : 3px;
+ border-radius : 50px;
+ border-color  : black;
+ max-width     : 96px;
+ max-height    : 96px;
+ min-width     : 96px;
+ min-height    : 96px;
+}
+
+ColorLedButton[isLit="true"] {
+ background    : qradialgradient(cx:0.5, cy:0.5, radius:0.8,
+                                 fx:0.5, fy:0.5, stop:0 %s, stop: 1 %s);
+}
+
+ColorLedButton[isLit="true"]:pressed {
+ background    : qradialgradient(cx:0.5, cy:0.5, radius:0.82,
+                                 fx:0.55, fy:0.55, stop:0 %s, stop: 1 %s);
+}
+""" % (lighterColorName, darkerColorName,
+       darkerColorName, lighterColorName,
+       lighterColorName, colorName,
+       lighterColorName, colorName))
+        rect = QRect(-2, -2, 106, 106)
+        region = QRegion(rect, QRegion.Ellipse)
+        self.setMask(region)
+        self.setFocusPolicy(Qt.NoFocus)
+        self.released.connect(self.setOff)
+
+    def setOn(self):
+        self.setGraphicsEffect(GraphicsGlowEffect(self.__color))
+        self.setProperty("isLit", True)
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update()
+
+    def setOff(self):
+        self.setGraphicsEffect(None)
+        self.setProperty("isLit", False)
+        self.style().unpolish(self)
+        self.style().polish(self)
+        self.update()
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
