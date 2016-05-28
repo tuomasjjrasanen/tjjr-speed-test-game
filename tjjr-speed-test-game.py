@@ -20,6 +20,62 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+class GraphicsGlowEffect(QGraphicsEffect):
+
+    def __init__(self, color):
+        super().__init__()
+
+        self.__color  = color
+        self.__extent = 100
+
+    def boundingRectFor(self, rect):
+        return QRectF(
+            rect.left()   - 1 * self.__extent,
+            rect.top()    - 1 * self.__extent,
+            rect.width()  + 2 * self.__extent,
+            rect.height() + 2 * self.__extent)
+
+    def draw(self, painter):
+        sourcePixmap, sourceOffset = self.sourcePixmap(Qt.LogicalCoordinates)
+
+        colorizeEffect = QGraphicsColorizeEffect()
+        colorizeEffect.setColor(self.__color)
+
+        colorizedPixmap = self.applyEffectToPixmap(sourcePixmap, colorizeEffect, 0)
+
+        blurEffect = QGraphicsBlurEffect()
+        blurEffect.setBlurRadius(15)
+
+        colorizedBlurredPixmap = self.applyEffectToPixmap(colorizedPixmap,
+                                                          blurEffect,
+                                                          self.__extent)
+
+        for i in range(5):
+            position = sourceOffset - QPoint(self.__extent, self.__extent)
+            painter.drawPixmap(position, colorizedBlurredPixmap)
+            self.drawSource(painter)
+
+    def applyEffectToPixmap(self, sourcePixmap, effect, extent):
+        if not sourcePixmap:
+            return QPixmap()
+
+        if not effect:
+            return sourcePixmap
+
+        scene  = QGraphicsScene()
+        item   = QGraphicsPixmapItem()
+        pixmap = QPixmap(sourcePixmap.width()  + 2 * extent,
+                         sourcePixmap.height() + 2 * extent)
+
+        item.setPixmap(sourcePixmap)
+        item.setGraphicsEffect(effect)
+        scene.addItem(item);
+        pixmap.fill(Qt.transparent)
+        scene.render(QPainter(pixmap), QRectF(),
+                     QRectF(-extent, -extent, pixmap.width(), pixmap.height()))
+
+        return pixmap
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
