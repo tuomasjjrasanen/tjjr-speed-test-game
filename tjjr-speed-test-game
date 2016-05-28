@@ -15,6 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
+import random
 import sys
 
 from PyQt4.QtCore import *
@@ -165,22 +166,39 @@ class ButtonPanel(QWidget):
         greenButton = ColorLedButton(QColor(0, 255, 0))
         blueButton = ColorLedButton(QColor(0, 0, 255))
         yellowButton = ColorLedButton(QColor(255, 255, 0))
-        redButton.setOn()
-        greenButton.setOn()
-        blueButton.setOn()
-        yellowButton.setOn()
 
-        scoreCounter = QLabel("0")
+        self.__litButton = None
+        self.__buttons = [redButton, greenButton, blueButton, yellowButton]
+
+        self.__scoreCounter = QLabel("0")
         font = QFont()
         font.setPointSize(48)
-        scoreCounter.setFont(font)
-        scoreCounter.setAlignment(Qt.AlignCenter)
+        self.__scoreCounter.setFont(font)
+        self.__scoreCounter.setAlignment(Qt.AlignCenter)
 
         topRowLayout.addWidget(redButton)
         middleRowLayout.addWidget(greenButton)
-        middleRowLayout.addWidget(scoreCounter)
+        middleRowLayout.addWidget(self.__scoreCounter)
         middleRowLayout.addWidget(blueButton)
         bottomRowLayout.addWidget(yellowButton)
+
+        self.__timer = QTimer()
+        self.__timer.timeout.connect(self.toggleRandomButton)
+        self.__timer.start(1000)
+
+    def toggleRandomButton(self):
+        if self.__litButton:
+            if self.__litButton.property("isLit"):
+                self.__timer.stop()
+                self.__litButton.setOff()
+                for button in self.__buttons:
+                    button.setText("Game over!")
+                return
+
+            self.__scoreCounter.setText(str(int(self.__scoreCounter.text()) + 1))
+
+        self.__litButton = self.__buttons[random.randint(0, 3)]
+        self.__litButton.setOn()
 
 class MainWindow(QMainWindow):
 
