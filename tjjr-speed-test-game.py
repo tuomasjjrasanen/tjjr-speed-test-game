@@ -145,6 +145,26 @@ ColorLedButton[isLit="true"]:pressed {
         self.style().polish(self)
         self.update()
 
+class ButtonPanel(QWidget):
+
+    def __init__(self):
+        super().__init__()
+
+        layout = QHBoxLayout(self)
+
+        redButton = ColorLedButton(QColor(255, 0, 0))
+        greenButton = ColorLedButton(QColor(0, 255, 0))
+        blueButton = ColorLedButton(QColor(0, 0, 255))
+        yellowButton = ColorLedButton(QColor(255, 255, 0))
+        redButton.setOn()
+        greenButton.setOn()
+        blueButton.setOn()
+        yellowButton.setOn()
+        layout.addWidget(redButton)
+        layout.addWidget(greenButton)
+        layout.addWidget(blueButton)
+        layout.addWidget(yellowButton)
+
 class MainWindow(QMainWindow):
 
     def __init__(self):
