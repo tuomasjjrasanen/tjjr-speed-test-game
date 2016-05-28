@@ -150,7 +150,16 @@ class ButtonPanel(QWidget):
     def __init__(self):
         super().__init__()
 
-        layout = QHBoxLayout(self)
+        layout = QVBoxLayout(self)
+
+        topRowLayout = QHBoxLayout()
+        layout.addLayout(topRowLayout)
+
+        middleRowLayout = QHBoxLayout()
+        layout.addLayout(middleRowLayout)
+
+        bottomRowLayout = QHBoxLayout()
+        layout.addLayout(bottomRowLayout)
 
         redButton = ColorLedButton(QColor(255, 0, 0))
         greenButton = ColorLedButton(QColor(0, 255, 0))
@@ -160,10 +169,11 @@ class ButtonPanel(QWidget):
         greenButton.setOn()
         blueButton.setOn()
         yellowButton.setOn()
-        layout.addWidget(redButton)
-        layout.addWidget(greenButton)
-        layout.addWidget(blueButton)
-        layout.addWidget(yellowButton)
+
+        topRowLayout.addWidget(redButton)
+        middleRowLayout.addWidget(greenButton)
+        middleRowLayout.addWidget(blueButton)
+        bottomRowLayout.addWidget(yellowButton)
 
 class MainWindow(QMainWindow):
 
