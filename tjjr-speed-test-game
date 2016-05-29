@@ -153,9 +153,6 @@ class ButtonPanel(QWidget):
 
         layout = QVBoxLayout(self)
 
-        topRowLayout = QHBoxLayout()
-        layout.addLayout(topRowLayout)
-
         middleRowLayout = QHBoxLayout()
         layout.addLayout(middleRowLayout)
 
@@ -176,11 +173,18 @@ class ButtonPanel(QWidget):
         self.__scoreCounter.setFont(font)
         self.__scoreCounter.setAlignment(Qt.AlignCenter)
 
-        topRowLayout.addWidget(redButton)
-        middleRowLayout.addWidget(greenButton)
+        bottomRowLayout.addStretch()
+        bottomRowLayout.addSpacing(20)
+        bottomRowLayout.addWidget(redButton)
+        bottomRowLayout.addSpacing(20)
+        bottomRowLayout.addWidget(greenButton)
+        bottomRowLayout.addSpacing(20)
         middleRowLayout.addWidget(self.__scoreCounter)
-        middleRowLayout.addWidget(blueButton)
+        bottomRowLayout.addWidget(blueButton)
+        bottomRowLayout.addSpacing(20)
         bottomRowLayout.addWidget(yellowButton)
+        bottomRowLayout.addSpacing(20)
+        bottomRowLayout.addStretch()
 
         self.__timer = QTimer()
         self.__timer.timeout.connect(self.toggleRandomButton)
