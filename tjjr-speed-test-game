@@ -130,7 +130,7 @@ ColorLedButton[isLit="true"]:pressed {
         region = QRegion(rect, QRegion.Ellipse)
         self.setMask(region)
         self.setFocusPolicy(Qt.NoFocus)
-        self.released.connect(self.setOff)
+        self.pressed.connect(self.setOff)
 
     def setOn(self):
         self.setGraphicsEffect(GraphicsGlowEffect(self.__color))
