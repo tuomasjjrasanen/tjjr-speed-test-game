@@ -158,7 +158,7 @@ class ScoreCounter(QLabel):
     def increment(self):
         self.setText(str(int(self.text()) + 1))
 
-class ButtonPanel(QWidget):
+class Dashboard(QWidget):
 
     def __init__(self):
         super().__init__()
@@ -217,7 +217,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setCentralWidget(ButtonPanel())
+        self.setCentralWidget(Dashboard())
 
 def main():
     app = QApplication(sys.argv)
