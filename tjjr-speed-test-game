@@ -209,10 +209,12 @@ class Engine(QObject):
         self.__buttons      = []
         self.__scoreCounter = None
         self.__timerId      = None
+        self.__isGameOver   = False
 
     def timerEvent(self, event):
         for button in self.__buttons:
             if button.isLit():
+                button.setText("Too slow!\nGame over!")
                 self.__gameOver()
                 return
 
@@ -222,20 +224,29 @@ class Engine(QObject):
         self.killTimer(self.__timerId)
         self.__timerId = None
 
-        for button in self.__buttons:
-            button.switchOn()
-            button.setText("Game over!\nPress to\nplay again.")
+        self.__isGameOver = True
 
     def addButton(self, button):
         button.pressed.connect(lambda: self.__buttonPressed(button))
         self.__buttons.append(button)
+        button.switchOn()
+        button.setText("Press to\nstart!")
 
     def __buttonPressed(self, button):
+        if self.__isGameOver:
+            self.__isGameOver = False
+            for button in self.__buttons:
+                button.switchOn()
+                button.setText("Press to\nstart!")
+            return
+
         if self.__timerId is None:
             self.start()
             return
 
         if not button.isLit():
+            button.switchOn()
+            button.setText("Wrong button!\nGame over!")
             self.__gameOver()
             return
 
