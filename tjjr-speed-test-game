@@ -145,6 +145,9 @@ ColorLedButton[isLit="true"]:pressed {
         self.style().polish(self)
         self.update()
 
+    def isLit(self):
+        return self.property("isLit")
+
 class ScoreCounter(QLabel):
 
     def __init__(self):
