@@ -200,7 +200,6 @@ class Dashboard(QWidget):
         self.__engine.addButton(blueButton)
         self.__engine.addButton(yellowButton)
         self.__engine.setScoreCounter(self.__scoreCounter)
-        self.__engine.start()
 
 class Engine(QObject):
 
@@ -221,11 +220,11 @@ class Engine(QObject):
 
     def __gameOver(self):
         self.killTimer(self.__timerId)
+        self.__timerId = None
 
         for button in self.__buttons:
-            button.pressed.disconnect()
             button.switchOn()
-            button.setText("Game over!")
+            button.setText("Game over!\nPress to\nplay again.")
 
     def addButton(self, button):
         button.pressed.connect(lambda: self.__buttonPressed(button))
@@ -233,6 +232,7 @@ class Engine(QObject):
 
     def __buttonPressed(self, button):
         if self.__timerId is None:
+            self.start()
             return
 
         if not button.isLit():
@@ -246,6 +246,10 @@ class Engine(QObject):
         self.__scoreCounter = scoreCounter
 
     def start(self):
+        for button in self.__buttons:
+            button.switchOff()
+            button.setText("")
+        self.__scoreCounter.reset()
         self.__timerId = self.startTimer(1000)
 
 class MainWindow(QMainWindow):
