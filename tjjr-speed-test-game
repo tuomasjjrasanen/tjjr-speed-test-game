@@ -145,6 +145,19 @@ ColorLedButton[isLit="true"]:pressed {
         self.style().polish(self)
         self.update()
 
+class ScoreCounter(QLabel):
+
+    def __init__(self):
+        super().__init__("0")
+
+        font = QFont()
+        font.setPointSize(48)
+        self.setFont(font)
+        self.setAlignment(Qt.AlignCenter)
+
+    def increment(self):
+        self.setText(str(int(self.text()) + 1))
+
 class ButtonPanel(QWidget):
 
     def __init__(self):
@@ -166,11 +179,7 @@ class ButtonPanel(QWidget):
         self.__litButton = None
         self.__buttons = [redButton, greenButton, blueButton, yellowButton]
 
-        self.__scoreCounter = QLabel("0")
-        font = QFont()
-        font.setPointSize(48)
-        self.__scoreCounter.setFont(font)
-        self.__scoreCounter.setAlignment(Qt.AlignCenter)
+        self.__scoreCounter = ScoreCounter()
 
         bottomRowLayout.addStretch()
         bottomRowLayout.addSpacing(20)
@@ -198,7 +207,7 @@ class ButtonPanel(QWidget):
                     button.setText("Game over!")
                 return
 
-            self.__scoreCounter.setText(str(int(self.__scoreCounter.text()) + 1))
+            self.__scoreCounter.increment()
 
         self.__litButton = self.__buttons[random.randint(0, 3)]
         self.__litButton.switchOn()
