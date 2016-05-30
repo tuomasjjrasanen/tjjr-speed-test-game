@@ -82,10 +82,11 @@ class ColorLedButton(QPushButton):
     def __init__(self, color):
         super().__init__()
 
-        self.__color = color
-        colorName = color.name()
-        darkerColorName = color.darker().name()
+        self.__color     = color
+        colorName        = color.name()
+        darkerColorName  = color.darker().name()
         lighterColorName = color.lighter().name()
+
         self.setStyleSheet("""
 ColorLedButton {
  background    : qlineargradient(x1:0, y1:-0.5, x2:0, y2:1.3,
@@ -123,9 +124,8 @@ ColorLedButton[isLit="true"]:pressed {
        darkerColorName, lighterColorName,
        lighterColorName, colorName,
        lighterColorName, colorName))
-        rect = QRect(-2, -2, 106, 106)
-        region = QRegion(rect, QRegion.Ellipse)
-        self.setMask(region)
+
+        self.setMask(QRegion(QRect(-2, -2, 106, 106), QRegion.Ellipse))
         self.setFocusPolicy(Qt.NoFocus)
 
     def switchOn(self):
@@ -163,20 +163,19 @@ class Dashboard(QWidget):
     def __init__(self):
         super().__init__()
 
-        layout = QVBoxLayout(self)
-
-        middleRowLayout = QHBoxLayout()
-        layout.addLayout(middleRowLayout)
-
-        bottomRowLayout = QHBoxLayout()
-        layout.addLayout(bottomRowLayout)
-
-        redButton = ColorLedButton(QColor(255, 0, 0))
-        greenButton = ColorLedButton(QColor(0, 255, 0))
-        blueButton = ColorLedButton(QColor(0, 0, 255))
-        yellowButton = ColorLedButton(QColor(255, 255, 0))
-
+        self.__engine       = Engine()
         self.__scoreCounter = ScoreCounter()
+
+        layout              = QVBoxLayout(self)
+        middleRowLayout     = QHBoxLayout()
+        bottomRowLayout     = QHBoxLayout()
+
+        redButton           = ColorLedButton(QColor(255, 0, 0))
+        greenButton         = ColorLedButton(QColor(0, 255, 0))
+        blueButton          = ColorLedButton(QColor(0, 0, 255))
+        yellowButton        = ColorLedButton(QColor(255, 255, 0))
+
+        middleRowLayout.addWidget(self.__scoreCounter)
 
         bottomRowLayout.addStretch()
         bottomRowLayout.addSpacing(20)
@@ -184,14 +183,15 @@ class Dashboard(QWidget):
         bottomRowLayout.addSpacing(20)
         bottomRowLayout.addWidget(greenButton)
         bottomRowLayout.addSpacing(20)
-        middleRowLayout.addWidget(self.__scoreCounter)
         bottomRowLayout.addWidget(blueButton)
         bottomRowLayout.addSpacing(20)
         bottomRowLayout.addWidget(yellowButton)
         bottomRowLayout.addSpacing(20)
         bottomRowLayout.addStretch()
 
-        self.__engine = Engine()
+        layout.addLayout(middleRowLayout)
+        layout.addLayout(bottomRowLayout)
+
         self.__engine.addButton(redButton)
         self.__engine.addButton(greenButton)
         self.__engine.addButton(blueButton)
