@@ -179,9 +179,6 @@ class Dashboard(QWidget):
         blueButton = ColorLedButton(QColor(0, 0, 255))
         yellowButton = ColorLedButton(QColor(255, 255, 0))
 
-        self.__litButton = None
-        self.__buttons = [redButton, greenButton, blueButton, yellowButton]
-
         self.__scoreCounter = ScoreCounter()
 
         bottomRowLayout.addStretch()
@@ -197,23 +194,59 @@ class Dashboard(QWidget):
         bottomRowLayout.addSpacing(20)
         bottomRowLayout.addStretch()
 
-        self.__timer = QTimer()
-        self.__timer.timeout.connect(self.toggleRandomButton)
-        self.__timer.start(1000)
+        self.__engine = Engine()
+        self.__engine.addButton(redButton)
+        self.__engine.addButton(greenButton)
+        self.__engine.addButton(blueButton)
+        self.__engine.addButton(yellowButton)
+        self.__engine.setScoreCounter(self.__scoreCounter)
+        self.__engine.start()
 
-    def toggleRandomButton(self):
-        if self.__litButton:
-            if self.__litButton.property("isLit"):
-                self.__timer.stop()
-                self.__litButton.switchOff()
-                for button in self.__buttons:
-                    button.setText("Game over!")
+class Engine(QObject):
+
+    def __init__(self):
+        super().__init__()
+
+        self.__buttons      = []
+        self.__scoreCounter = None
+        self.__timerId      = None
+
+    def timerEvent(self, event):
+        for button in self.__buttons:
+            if button.isLit():
+                self.__gameOver()
                 return
 
-            self.__scoreCounter.increment()
+        self.__buttons[random.randrange(len(self.__buttons))].switchOn()
 
-        self.__litButton = self.__buttons[random.randint(0, 3)]
-        self.__litButton.switchOn()
+    def __gameOver(self):
+        self.killTimer(self.__timerId)
+
+        for button in self.__buttons:
+            button.pressed.disconnect()
+            button.switchOn()
+            button.setText("Game over!")
+
+    def addButton(self, button):
+        button.pressed.connect(lambda: self.__buttonPressed(button))
+        self.__buttons.append(button)
+
+    def __buttonPressed(self, button):
+        if self.__timerId is None:
+            return
+
+        if not button.isLit():
+            self.__gameOver()
+            return
+
+        button.switchOff()
+        self.__scoreCounter.increment()
+
+    def setScoreCounter(self, scoreCounter):
+        self.__scoreCounter = scoreCounter
+
+    def start(self):
+        self.__timerId = self.startTimer(1000)
 
 class MainWindow(QMainWindow):
 
