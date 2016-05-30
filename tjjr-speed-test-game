@@ -158,6 +158,9 @@ class ScoreCounter(QLabel):
     def increment(self):
         self.setText(str(int(self.text()) + 1))
 
+    def reset(self):
+        self.setText("0")
+
 class Dashboard(QWidget):
 
     def __init__(self):
