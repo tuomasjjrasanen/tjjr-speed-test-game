@@ -42,21 +42,21 @@ class GraphicsGlowEffect(QGraphicsEffect):
         colorizeEffect = QGraphicsColorizeEffect()
         colorizeEffect.setColor(self.__color)
 
-        colorizedPixmap = self.applyEffectToPixmap(sourcePixmap, colorizeEffect, 0)
+        colorizedPixmap = self.__applyEffectToPixmap(sourcePixmap, colorizeEffect, 0)
 
         blurEffect = QGraphicsBlurEffect()
         blurEffect.setBlurRadius(15)
 
-        colorizedBlurredPixmap = self.applyEffectToPixmap(colorizedPixmap,
-                                                          blurEffect,
-                                                          self.__extent)
+        colorizedBlurredPixmap = self.__applyEffectToPixmap(colorizedPixmap,
+                                                            blurEffect,
+                                                            self.__extent)
 
         for i in range(5):
             position = sourceOffset - QPoint(self.__extent, self.__extent)
             painter.drawPixmap(position, colorizedBlurredPixmap)
             self.drawSource(painter)
 
-    def applyEffectToPixmap(self, sourcePixmap, effect, extent):
+    def __applyEffectToPixmap(self, sourcePixmap, effect, extent):
         if not sourcePixmap:
             return QPixmap()
 
@@ -131,14 +131,14 @@ ColorLedButton[isLit="true"]:pressed {
         self.setMask(region)
         self.setFocusPolicy(Qt.NoFocus)
 
-    def setOn(self):
+    def switchOn(self):
         self.setGraphicsEffect(GraphicsGlowEffect(self.__color))
         self.setProperty("isLit", True)
         self.style().unpolish(self)
         self.style().polish(self)
         self.update()
 
-    def setOff(self):
+    def switchOff(self):
         self.setGraphicsEffect(None)
         self.setProperty("isLit", False)
         self.style().unpolish(self)
@@ -193,7 +193,7 @@ class ButtonPanel(QWidget):
         if self.__litButton:
             if self.__litButton.property("isLit"):
                 self.__timer.stop()
-                self.__litButton.setOff()
+                self.__litButton.switchOff()
                 for button in self.__buttons:
                     button.setText("Game over!")
                 return
@@ -201,7 +201,7 @@ class ButtonPanel(QWidget):
             self.__scoreCounter.setText(str(int(self.__scoreCounter.text()) + 1))
 
         self.__litButton = self.__buttons[random.randint(0, 3)]
-        self.__litButton.setOn()
+        self.__litButton.switchOn()
 
 class MainWindow(QMainWindow):
 
