@@ -103,10 +103,7 @@ ColorLedButton {
 ColorLedButton:pressed {
  background    : qlineargradient(x1:0, y1:0, x2:0, y2:3,
                                  stop:0 %s, stop: 1 %s);
- border-style  : solid;
  border-width  : 3px;
- border-radius : 50px;
- border-color  : black;
  max-width     : 96px;
  max-height    : 96px;
  min-width     : 96px;
