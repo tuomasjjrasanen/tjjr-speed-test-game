@@ -171,6 +171,9 @@ ScoreCounter {
     def reset(self):
         self.setText("0")
 
+    def count(self):
+        return int(self.text())
+
 class Dashboard(QWidget):
 
     def __init__(self):
