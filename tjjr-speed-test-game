@@ -192,8 +192,11 @@ class Dashboard(QWidget):
         bottomRowLayout.addSpacing(20)
         bottomRowLayout.addStretch()
 
+        layout.addSpacing(50)
         layout.addLayout(middleRowLayout)
+        layout.addSpacing(50)
         layout.addLayout(bottomRowLayout)
+        layout.addSpacing(50)
 
         self.__controller.addButton(redButton)
         self.__controller.addButton(greenButton)
