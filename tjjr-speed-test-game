@@ -240,12 +240,12 @@ class Controller(QObject):
         self.__isGameOver = True
 
     def addButton(self, button):
-        button.pressed.connect(lambda: self.__buttonPressed(button))
+        button.clicked.connect(lambda: self.__buttonClicked(button))
         self.__buttons.append(button)
         button.switchOn()
         button.setText("Press to\nstart!")
 
-    def __buttonPressed(self, button):
+    def __buttonClicked(self, button):
         if self.__isGameOver:
             self.__isGameOver = False
             for button in self.__buttons:
