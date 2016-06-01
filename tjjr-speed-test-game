@@ -214,6 +214,9 @@ class Dashboard(QWidget):
         self.__controller.addButton(yellowButton)
         self.__controller.setScoreCounter(self.__scoreCounter)
 
+    def clickButton(self, i):
+        self.__controller.clickButton(i)
+
 class Controller(QObject):
 
     def __init__(self):
@@ -223,6 +226,9 @@ class Controller(QObject):
         self.__scoreCounter = None
         self.__timerId      = None
         self.__isGameOver   = False
+
+    def clickButton(self, i):
+        self.__buttons[i].click()
 
     def timerEvent(self, event):
         for button in self.__buttons:
@@ -281,10 +287,22 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        self.__dashboard = Dashboard()
+
         self.setStyleSheet("background-color: #3f3f3f;")
-        self.setCentralWidget(Dashboard())
+        self.setCentralWidget(self.__dashboard)
         self.setWindowTitle("TJJR's Speed Test Game")
         self.setFixedSize(QSize(694, 356))
+
+    def keyPressEvent(self, event):
+        keys = [Qt.Key_Left, Qt.Key_Up, Qt.Key_Down, Qt.Key_Right]
+        try:
+            i = keys.index(event.key())
+        except ValueError:
+            super().keyPressEvent(event)
+            return
+        else:
+            self.__dashboard.clickButton(i)
 
 def main():
     app = QApplication(sys.argv)
