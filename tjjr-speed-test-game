@@ -222,6 +222,8 @@ class Dashboard(QWidget):
 
 class Controller(QObject):
 
+    TIMEOUTS = range(1000, 475, -25)
+
     def __init__(self):
         super().__init__()
 
@@ -241,6 +243,11 @@ class Controller(QObject):
                 return
 
         self.__buttons[random.randrange(len(self.__buttons))].switchOn()
+
+        level, remainder = divmod(self.__scoreCounter.count(), 5)
+        if remainder == 0 and level < len(Controller.TIMEOUTS) - 1:
+            self.killTimer(self.__timerId)
+            self.__timerId = self.startTimer(Controller.TIMEOUTS[level])
 
     def __gameOver(self):
         self.killTimer(self.__timerId)
