@@ -283,6 +283,7 @@ class MainWindow(QMainWindow):
 
         self.setStyleSheet("background-color: #3f3f3f;")
         self.setCentralWidget(Dashboard())
+        self.setWindowTitle("TJJR's Speed Test Game")
 
 def main():
     app = QApplication(sys.argv)
