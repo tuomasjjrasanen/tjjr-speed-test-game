@@ -155,6 +155,16 @@ class ScoreCounter(QLabel):
         self.setFont(font)
         self.setAlignment(Qt.AlignCenter)
 
+        self.setStyleSheet("""
+ScoreCounter {
+ background-color : #9f9f9f;
+ border-style     : solid;
+ border-width     : 1px;
+ border-color     : black;
+ border-radius    : 10px;
+}
+        """)
+
     def increment(self):
         self.setText(str(int(self.text()) + 1))
 
