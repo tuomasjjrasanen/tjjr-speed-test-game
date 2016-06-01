@@ -166,7 +166,7 @@ class Dashboard(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.__engine       = Engine()
+        self.__controller   = Controller()
         self.__scoreCounter = ScoreCounter()
 
         layout              = QVBoxLayout(self)
@@ -195,13 +195,13 @@ class Dashboard(QWidget):
         layout.addLayout(middleRowLayout)
         layout.addLayout(bottomRowLayout)
 
-        self.__engine.addButton(redButton)
-        self.__engine.addButton(greenButton)
-        self.__engine.addButton(blueButton)
-        self.__engine.addButton(yellowButton)
-        self.__engine.setScoreCounter(self.__scoreCounter)
+        self.__controller.addButton(redButton)
+        self.__controller.addButton(greenButton)
+        self.__controller.addButton(blueButton)
+        self.__controller.addButton(yellowButton)
+        self.__controller.setScoreCounter(self.__scoreCounter)
 
-class Engine(QObject):
+class Controller(QObject):
 
     def __init__(self):
         super().__init__()
