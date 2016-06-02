@@ -233,7 +233,7 @@ class Controller(QObject):
         self.__isGameOver   = False
 
     def clickButton(self, i):
-        self.__buttons[i].click()
+        self.__buttons[i].animateClick()
 
     def timerEvent(self, event):
         for button in self.__buttons:
