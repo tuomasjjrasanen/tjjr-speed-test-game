@@ -144,6 +144,12 @@ ColorLedButton[isLit="true"]:pressed {
         self.style().polish(self)
         self.update()
 
+    def toggle(self):
+        if self.isLit():
+            self.switchOff()
+        else:
+            self.switchOn()
+
     def isLit(self):
         return self.property("isLit")
 
