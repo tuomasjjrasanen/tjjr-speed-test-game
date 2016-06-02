@@ -237,7 +237,7 @@ class Controller(QObject):
 
         self.__buttons      = []
         self.__scoreCounter = None
-        self.__timerId      = None
+        self.__gameTimerId  = None
         self.__isGameOver   = False
         self.__misclicks    = 0
 
@@ -255,12 +255,12 @@ class Controller(QObject):
 
         level, remainder = divmod(self.__scoreCounter.count(), 5)
         if remainder == 0 and level < len(Controller.TIMEOUTS) - 1:
-            self.killTimer(self.__timerId)
-            self.__timerId = self.startTimer(Controller.TIMEOUTS[level])
+            self.killTimer(self.__gameTimerId)
+            self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
     def __gameOver(self):
-        self.killTimer(self.__timerId)
-        self.__timerId = None
+        self.killTimer(self.__gameTimerId)
+        self.__gameTimerId = None
 
         self.__isGameOver = True
 
@@ -278,7 +278,7 @@ class Controller(QObject):
                 button.setText("Press to\nstart!")
             return
 
-        if self.__timerId is None:
+        if self.__gameTimerId is None:
             self.start()
             return
 
@@ -301,7 +301,7 @@ class Controller(QObject):
             button.switchOff()
             button.setText("")
         self.__scoreCounter.reset()
-        self.__timerId = self.startTimer(1000)
+        self.__gameTimerId = self.startTimer(1000)
         self.__misclicks = 0
 
 class MainWindow(QMainWindow):
