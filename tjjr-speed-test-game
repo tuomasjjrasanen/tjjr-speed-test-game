@@ -21,7 +21,7 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
-max_misclicks = 0
+max_misclicks = 3
 
 class GraphicsGlowEffect(QGraphicsEffect):
 
