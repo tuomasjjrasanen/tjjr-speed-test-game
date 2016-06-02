@@ -247,8 +247,7 @@ class Controller(QObject):
     def timerEvent(self, event):
         for button in self.__buttons:
             if button.isLit():
-                button.setText("Too slow!\nGame over!")
-                self.__gameOver()
+                self.__gameOver(button, "Too slow!")
                 return
 
         self.__buttons[random.randrange(len(self.__buttons))].switchOn()
@@ -258,7 +257,8 @@ class Controller(QObject):
             self.killTimer(self.__gameTimerId)
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
-    def __gameOver(self):
+    def __gameOver(self, failButton, reason):
+        failButton.setText("%s\nGame over!" % reason)
         self.killTimer(self.__gameTimerId)
         self.__gameTimerId = None
 
@@ -286,8 +286,7 @@ class Controller(QObject):
             self.__misclicks += 1
             if self.__misclicks > max_misclicks:
                 button.switchOn()
-                button.setText("Wrong button!\nGame over!")
-                self.__gameOver()
+                self.__gameOver(button, "Wrong button!")
             return
 
         button.switchOff()
