@@ -237,14 +237,29 @@ class Controller(QObject):
 
         self.__buttons      = []
         self.__scoreCounter = None
+        self.__failButton   = None
+        self.__failTicks    = 0
+        self.__failTimerId  = None
         self.__gameTimerId  = None
-        self.__isGameOver   = False
         self.__misclicks    = 0
 
     def clickButton(self, i):
         self.__buttons[i].animateClick()
 
     def timerEvent(self, event):
+        if event.timerId() == self.__failTimerId:
+            self.__failTicks += 1
+            self.__failButton.toggle()
+            if self.__failTicks >= 10:
+                self.killTimer(self.__failTimerId)
+                self.__failTimerId = None
+
+                for button in self.__buttons:
+                    button.switchOn()
+                    button.setText("Press to\nstart!")
+
+            return
+
         for button in self.__buttons:
             if button.isLit():
                 self.__gameOver(button, "Too slow!")
@@ -258,11 +273,11 @@ class Controller(QObject):
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
     def __gameOver(self, failButton, reason):
-        failButton.setText("%s\nGame over!" % reason)
+        self.__failButton = failButton
+        self.__failButton.setText("%s\nGame over!" % reason)
         self.killTimer(self.__gameTimerId)
         self.__gameTimerId = None
-
-        self.__isGameOver = True
+        self.__failTimerId = self.startTimer(500)
 
     def addButton(self, button):
         button.clicked.connect(lambda: self.__buttonClicked(button))
@@ -271,11 +286,7 @@ class Controller(QObject):
         button.setText("Press to\nstart!")
 
     def __buttonClicked(self, button):
-        if self.__isGameOver:
-            self.__isGameOver = False
-            for button in self.__buttons:
-                button.switchOn()
-                button.setText("Press to\nstart!")
+        if self.__failTimerId is not None:
             return
 
         if self.__gameTimerId is None:
@@ -302,6 +313,8 @@ class Controller(QObject):
         self.__scoreCounter.reset()
         self.__gameTimerId = self.startTimer(1000)
         self.__misclicks = 0
+        self.__failButton = None
+        self.__failTicks = 0
 
 class MainWindow(QMainWindow):
 
