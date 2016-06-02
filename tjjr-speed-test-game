@@ -21,6 +21,8 @@ import sys
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+max_misclicks = 0
+
 class GraphicsGlowEffect(QGraphicsEffect):
 
     def __init__(self, color):
@@ -231,6 +233,7 @@ class Controller(QObject):
         self.__scoreCounter = None
         self.__timerId      = None
         self.__isGameOver   = False
+        self.__misclicks    = 0
 
     def clickButton(self, i):
         self.__buttons[i].animateClick()
@@ -274,9 +277,11 @@ class Controller(QObject):
             return
 
         if not button.isLit():
-            button.switchOn()
-            button.setText("Wrong button!\nGame over!")
-            self.__gameOver()
+            self.__misclicks += 1
+            if self.__misclicks > max_misclicks:
+                button.switchOn()
+                button.setText("Wrong button!\nGame over!")
+                self.__gameOver()
             return
 
         button.switchOff()
@@ -291,6 +296,7 @@ class Controller(QObject):
             button.setText("")
         self.__scoreCounter.reset()
         self.__timerId = self.startTimer(1000)
+        self.__misclicks = 0
 
 class MainWindow(QMainWindow):
 
