@@ -165,7 +165,7 @@ class ScoreCounter(QLabel):
 
         self.setStyleSheet("""
 ScoreCounter {
- background-color : #9f9f9f;
+ background-color : #bfbfbf;
  border-style     : solid;
  border-width     : 1px;
  border-color     : black;
