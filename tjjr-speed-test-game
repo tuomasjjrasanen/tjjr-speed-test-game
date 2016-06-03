@@ -86,12 +86,12 @@ class ColorLedButton(QPushButton):
 
         self.__color     = color
         colorName        = color.name()
-        darkerColorName  = color.darker().name()
-        lighterColorName = color.lighter().name()
+        darkerColorName  = color.darker(500).name()
+        lighterColorName = color.lighter(175).name()
 
         self.setStyleSheet("""
 ColorLedButton {
- background    : qlineargradient(x1:0, y1:-0.5, x2:0, y2:1.3,
+ background    : qlineargradient(x1:0, y1:-1.5, x2:0, y2:1.3,
                                  stop:0 %s, stop: 1 %s);
  border-style  : solid;
  border-width  : 1px;
