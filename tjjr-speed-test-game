@@ -182,27 +182,6 @@ ScoreCounter {
     def count(self):
         return int(self.text())
 
-class MisclickCounter(QLabel):
-
-    def __init__(self, count):
-        super().__init__(count * "❤")
-
-        self.__count = count
-        self.setAlignment(Qt.AlignCenter)
-
-        self.setStyleSheet("""
-MisclickCounter {
-  font  : 48px;
-  color : red;
-}
-        """)
-
-    def decrement(self):
-        self.setText((len(self.text()) - 1) * "❤")
-
-    def reset(self):
-        self.setText(self.__count * "❤")
-
 class Dashboard(QWidget):
 
     def __init__(self):
@@ -210,7 +189,6 @@ class Dashboard(QWidget):
 
         self.__controller   = Controller()
         self.__scoreCounter = ScoreCounter()
-        self.__misclickCounter = MisclickCounter(max_misclicks)
 
         layout              = QVBoxLayout(self)
         middleRowLayout     = QHBoxLayout()
@@ -220,8 +198,6 @@ class Dashboard(QWidget):
         greenButton         = ColorLedButton(QColor(0, 255, 0))
         blueButton          = ColorLedButton(QColor(0, 0, 255))
         yellowButton        = ColorLedButton(QColor(255, 255, 0))
-
-        layout.addWidget(self.__misclickCounter)
 
         middleRowLayout.addWidget(self.__scoreCounter)
 
@@ -247,7 +223,6 @@ class Dashboard(QWidget):
         self.__controller.addButton(blueButton)
         self.__controller.addButton(yellowButton)
         self.__controller.setScoreCounter(self.__scoreCounter)
-        self.__controller.setMisclickCounter(self.__misclickCounter)
 
     def clickButton(self, i):
         self.__controller.clickButton(i)
@@ -266,7 +241,6 @@ class Controller(QObject):
         self.__failTimerId  = None
         self.__gameTimerId  = None
         self.__misclicks    = 0
-        self.__misclickCouter = None
 
     def clickButton(self, i):
         self.__buttons[i].animateClick()
@@ -320,7 +294,6 @@ class Controller(QObject):
 
         if not button.isLit():
             self.__misclicks += 1
-            self.__misclickCounter.decrement()
             if self.__misclicks > max_misclicks:
                 button.switchOn()
                 self.__gameOver(button, "Too many\nmisclicks!")
@@ -332,15 +305,11 @@ class Controller(QObject):
     def setScoreCounter(self, scoreCounter):
         self.__scoreCounter = scoreCounter
 
-    def setMisclickCounter(self, misclickCounter):
-        self.__misclickCounter = misclickCounter
-
     def start(self):
         for button in self.__buttons:
             button.switchOff()
             button.setText("")
         self.__scoreCounter.reset()
-        self.__misclickCounter.reset()
         self.__gameTimerId = self.startTimer(1000)
         self.__misclicks = 0
         self.__failButton = None
