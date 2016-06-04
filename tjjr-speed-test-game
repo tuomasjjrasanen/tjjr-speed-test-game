@@ -180,6 +180,7 @@ class Dashboard(QWidget):
     def __init__(self):
         super().__init__()
 
+        self.__buttons      = []
         self.__controller   = Controller()
         self.__scoreCounter = ScoreCounter()
 
@@ -187,22 +188,16 @@ class Dashboard(QWidget):
         middleRowLayout     = QHBoxLayout()
         bottomRowLayout     = QHBoxLayout()
 
-        redButton           = ColorLedButton(QColor(255, 0, 0))
-        greenButton         = ColorLedButton(QColor(0, 255, 0))
-        blueButton          = ColorLedButton(QColor(0, 0, 255))
-        yellowButton        = ColorLedButton(QColor(255, 255, 0))
-
         middleRowLayout.addWidget(self.__scoreCounter)
 
         bottomRowLayout.addStretch()
-        bottomRowLayout.addSpacing(50)
-        bottomRowLayout.addWidget(redButton)
-        bottomRowLayout.addSpacing(50)
-        bottomRowLayout.addWidget(greenButton)
-        bottomRowLayout.addSpacing(50)
-        bottomRowLayout.addWidget(blueButton)
-        bottomRowLayout.addSpacing(50)
-        bottomRowLayout.addWidget(yellowButton)
+        for color in [QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255), QColor(255, 255, 0)]:
+            button = ColorLedButton(color)
+            self.__buttons.append(button)
+            bottomRowLayout.addSpacing(50)
+            bottomRowLayout.addWidget(button)
+            self.__controller.addButton(button)
+
         bottomRowLayout.addSpacing(50)
         bottomRowLayout.addStretch()
 
@@ -211,11 +206,10 @@ class Dashboard(QWidget):
         layout.addLayout(bottomRowLayout)
         layout.addSpacing(50)
 
-        self.__controller.addButton(redButton)
-        self.__controller.addButton(greenButton)
-        self.__controller.addButton(blueButton)
-        self.__controller.addButton(yellowButton)
         self.__controller.setScoreCounter(self.__scoreCounter)
+
+    def buttons(self):
+        return self.__buttons
 
     def clickButton(self, i):
         self.__controller.clickButton(i)
