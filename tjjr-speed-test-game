@@ -222,6 +222,7 @@ class Controller(QObject):
         super().__init__()
 
         self.__buttons      = []
+        self.__dashboard    = None
         self.__scoreCounter = None
         self.__failButton   = None
         self.__failTicks    = 0
@@ -288,6 +289,9 @@ class Controller(QObject):
 
         button.switchOff()
         self.__scoreCounter.increment()
+
+    def setDashboard(self, dashboard):
+        self.__dashboard = dashboard
 
     def setScoreCounter(self, scoreCounter):
         self.__scoreCounter = scoreCounter
