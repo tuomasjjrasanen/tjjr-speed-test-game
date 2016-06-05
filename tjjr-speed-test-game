@@ -227,6 +227,7 @@ class Dashboard(QWidget):
         layout.addSpacing(50)
 
         self.__controller.setScoreCounter(self.scoreCounter)
+        self.__controller.setDashboard(self)
 
     def clickButton(self, i):
         self.buttons[i].animateClick()
@@ -316,10 +317,7 @@ class Controller(QObject):
         self.__scoreCounter = scoreCounter
 
     def start(self):
-        for button in self.__buttons:
-            button.switchOff()
-            button.setText("")
-        self.__scoreCounter.reset()
+        self.__dashboard.reset()
         self.__gameTimerId = self.startTimer(1000)
         self.__misclicks = 0
         self.__failButton = None
