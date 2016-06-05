@@ -215,6 +215,11 @@ class Dashboard(QWidget):
     def clickButton(self, i):
         self.buttons[i].animateClick()
 
+    def reset(self):
+        for button in self.buttons:
+            button.reset()
+        self.scoreCounter.reset()
+
 class Controller(QObject):
 
     TIMEOUTS = range(1000, 475, -25)
