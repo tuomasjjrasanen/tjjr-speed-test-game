@@ -209,7 +209,7 @@ class Dashboard(QWidget):
         self.__controller.setScoreCounter(self.scoreCounter)
 
     def clickButton(self, i):
-        self.__controller.clickButton(i)
+        self.buttons[i].animateClick()
 
 class Controller(QObject):
 
@@ -226,9 +226,6 @@ class Controller(QObject):
         self.__failTimerId  = None
         self.__gameTimerId  = None
         self.__misclicks    = 0
-
-    def clickButton(self, i):
-        self.__buttons[i].animateClick()
 
     def timerEvent(self, event):
         if event.timerId() == self.__failTimerId:
