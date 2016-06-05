@@ -81,22 +81,23 @@ class GraphicsGlowEffect(QGraphicsEffect):
 
 class ColorLedButton(QPushButton):
 
-    def __init__(self, color):
+    def __init__(self, color, radius=50):
         super().__init__()
 
         self.__color     = color
+        self.__radius    = radius
         self.__blinkTimerId = None
         colorName        = color.name()
         darkerColorName  = color.darker(500).name()
         lighterColorName = color.lighter(175).name()
-        self.setFixedSize(QSize(100, 100))
+        self.setFixedSize(QSize(radius * 2, radius * 2))
         self.setStyleSheet("""
 ColorLedButton {
  background    : qlineargradient(x1:0, y1:-1.5, x2:0, y2:1.3,
                                  stop:0 %s, stop: 1 %s);
  border-style  : solid;
  border-width  : 1px;
- border-radius : 50px;
+ border-radius : %spx;
  border-color  : black;
 }
 
@@ -115,12 +116,12 @@ ColorLedButton[isLit="true"]:pressed {
  background    : qradialgradient(cx:0.5, cy:0.5, radius:0.82,
                                  fx:0.55, fy:0.55, stop:0 %s, stop: 1 %s);
 }
-""" % (lighterColorName, darkerColorName,
+""" % (lighterColorName, darkerColorName, radius,
        darkerColorName, lighterColorName,
        lighterColorName, colorName,
        lighterColorName, colorName))
 
-        self.setMask(QRegion(QRect(-2, -2, 106, 106), QRegion.Ellipse))
+        self.setMask(QRegion(QRect(-2, -2, self.__radius * 2 + 6, self.__radius * 2 + 6), QRegion.Ellipse))
         self.setFocusPolicy(Qt.NoFocus)
 
     def switchOn(self):
