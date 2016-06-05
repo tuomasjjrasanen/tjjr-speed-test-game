@@ -180,7 +180,7 @@ class Dashboard(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.__buttons      = []
+        self.buttons      = []
         self.__controller   = Controller()
         self.__scoreCounter = ScoreCounter()
 
@@ -193,7 +193,7 @@ class Dashboard(QWidget):
         bottomRowLayout.addStretch()
         for color in [QColor(255, 0, 0), QColor(0, 255, 0), QColor(0, 0, 255), QColor(255, 255, 0)]:
             button = ColorLedButton(color)
-            self.__buttons.append(button)
+            self.buttons.append(button)
             bottomRowLayout.addSpacing(50)
             bottomRowLayout.addWidget(button)
             self.__controller.addButton(button)
@@ -207,9 +207,6 @@ class Dashboard(QWidget):
         layout.addSpacing(50)
 
         self.__controller.setScoreCounter(self.__scoreCounter)
-
-    def buttons(self):
-        return self.__buttons
 
     def clickButton(self, i):
         self.__controller.clickButton(i)
