@@ -85,6 +85,7 @@ class ColorLedButton(QPushButton):
         super().__init__()
 
         self.__color     = color
+        self.__blinkTimerId = None
         colorName        = color.name()
         darkerColorName  = color.darker(500).name()
         lighterColorName = color.lighter(175).name()
@@ -141,6 +142,20 @@ ColorLedButton[isLit="true"]:pressed {
             self.switchOff()
         else:
             self.switchOn()
+
+    def timerEvent(self, event):
+        if event.timerId() == self.__blinkTimerId:
+            self.toggle()
+        super().timerEvent(event)
+
+    def startBlinking(self, interval=550):
+        self.switchOn()
+        self.__blinkTimerId = self.startTimer(interval)
+
+    def stopBlinking(self):
+        self.killTimer(self.__blinkTimerId)
+        self.__blinkTimerId = None
+        self.switchOff()
 
     def isLit(self):
         return self.property("isLit")
