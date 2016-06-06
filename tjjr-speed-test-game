@@ -162,6 +162,7 @@ ColorLedButton[isLit="true"]:pressed {
         return self.property("isLit")
 
     def reset(self):
+        self.stopBlinking()
         self.switchOff()
         self.setText('')
 
