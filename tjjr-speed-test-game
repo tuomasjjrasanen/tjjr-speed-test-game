@@ -276,7 +276,7 @@ class Dashboard(QWidget):
 
 class Controller(QObject):
 
-    TIMEOUTS = range(1000, 475, -25)
+    TIMEOUTS = [1000 - i * 35 for i in range(17)]
 
     def __init__(self):
         super().__init__()
