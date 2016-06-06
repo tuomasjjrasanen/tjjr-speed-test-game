@@ -202,12 +202,27 @@ class Dashboard(QWidget):
         super().__init__()
 
         self.buttons      = []
+        self.__levelButtons = []
         self.__controller   = Controller()
         self.scoreCounter = ScoreCounter()
 
         layout              = QVBoxLayout(self)
+        topRowLayout        = QHBoxLayout()
         middleRowLayout     = QHBoxLayout()
         bottomRowLayout     = QHBoxLayout()
+
+        topRowLayout.addStretch()
+        for animal in  ["snail", "turtle", "runner", "rabbit",
+                        "kangaroo", "ostrich", "horse", "cheetah"]:
+            radius = 30
+            button = ColorLedButton(QColor(255, 0, 255), radius)
+            button.setIcon(QIcon(QPixmap("%s.png" % animal)))
+            button.setIconSize(QSize(radius, radius))
+            self.__levelButtons.append(button)
+            topRowLayout.addSpacing(radius)
+            topRowLayout.addWidget(button)
+        topRowLayout.addSpacing(radius)
+        topRowLayout.addStretch()
 
         middleRowLayout.addWidget(self.scoreCounter)
 
@@ -222,6 +237,9 @@ class Dashboard(QWidget):
         bottomRowLayout.addSpacing(50)
         bottomRowLayout.addStretch()
 
+        layout.addSpacing(50)
+        layout.addLayout(topRowLayout)
+        layout.addSpacing(50)
         layout.addLayout(middleRowLayout)
         layout.addSpacing(50)
         layout.addLayout(bottomRowLayout)
@@ -237,6 +255,24 @@ class Dashboard(QWidget):
         for button in self.buttons:
             button.reset()
         self.scoreCounter.reset()
+        for levelButton in self.__levelButtons:
+            levelButton.reset()
+
+    def advanceLevel(self, level):
+        if level % 2:
+            try:
+                button = self.__levelButtons[level // 2]
+            except IndexError:
+                return
+            button.switchOn()
+            button.startBlinking()
+        else:
+            try:
+                button = self.__levelButtons[(level - 1) // 2]
+            except IndexError:
+                return
+            button.stopBlinking()
+            button.switchOn()
 
 class Controller(QObject):
 
@@ -276,7 +312,9 @@ class Controller(QObject):
         self.__buttons[random.randrange(len(self.__buttons))].switchOn()
 
         level, remainder = divmod(self.__scoreCounter.count(), 5)
-        if remainder == 0 and level < len(Controller.TIMEOUTS) - 1:
+        if remainder == 0 and level < len(Controller.TIMEOUTS):
+            if level >= 1:
+                self.__dashboard.advanceLevel(level)
             self.killTimer(self.__gameTimerId)
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
