@@ -334,7 +334,6 @@ class MainWindow(QMainWindow):
         self.setStyleSheet("background-color: #3f3f3f;")
         self.setCentralWidget(self.__dashboard)
         self.setWindowTitle("TJJR's Speed Test Game")
-        self.setFixedSize(QSize(694, 356))
 
     def keyPressEvent(self, event):
         keys = [Qt.Key_Left, Qt.Key_Up, Qt.Key_Down, Qt.Key_Right]
