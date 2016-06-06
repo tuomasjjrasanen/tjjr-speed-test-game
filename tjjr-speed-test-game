@@ -154,9 +154,9 @@ ColorLedButton[isLit="true"]:pressed {
         self.__blinkTimerId = self.startTimer(interval)
 
     def stopBlinking(self):
-        self.killTimer(self.__blinkTimerId)
-        self.__blinkTimerId = None
-        self.switchOff()
+        if self.__blinkTimerId:
+            self.killTimer(self.__blinkTimerId)
+            self.__blinkTimerId = None
 
     def isLit(self):
         return self.property("isLit")
