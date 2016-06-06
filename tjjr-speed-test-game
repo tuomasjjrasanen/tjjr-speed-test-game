@@ -150,7 +150,7 @@ ColorLedButton[isLit="true"]:pressed {
         super().timerEvent(event)
 
     def startBlinking(self, interval=550):
-        self.switchOn()
+        self.stopBlinking()
         self.__blinkTimerId = self.startTimer(interval)
 
     def stopBlinking(self):
