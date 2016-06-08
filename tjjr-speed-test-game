@@ -189,6 +189,9 @@ ScoreCounter {
 }
         """)
 
+    def decrement(self):
+        self.setText(str(int(self.text()) - 1))
+
     def increment(self):
         self.setText(str(int(self.text()) + 1))
 
