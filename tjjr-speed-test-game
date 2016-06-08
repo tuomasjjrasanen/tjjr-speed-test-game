@@ -99,6 +99,7 @@ ColorLedButton {
  border-width  : 1px;
  border-radius : %spx;
  border-color  : black;
+ font-size     : 24px;
 }
 
 ColorLedButton:pressed {
@@ -315,13 +316,13 @@ class Controller(QObject):
 
                 for button in self.__buttons:
                     button.switchOn()
-                    button.setText("Press to\nstart!")
+                    button.setText("START")
 
             return
 
         for button in self.__buttons:
             if button.isLit():
-                self.__gameOver(button, "Too slow!")
+                self.__gameOver(button)
                 return
 
         self.__buttons[random.randrange(len(self.__buttons))].switchOn()
@@ -334,11 +335,11 @@ class Controller(QObject):
             self.killTimer(self.__gameTimerId)
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
-    def __gameOver(self, failButton, reason):
+    def __gameOver(self, failButton):
         self.__gameOverSoundEffect.play()
 
         self.__failButton = failButton
-        self.__failButton.setText("%s\nGame over!" % reason)
+        self.__failButton.setText("GAME\nOVER")
         self.killTimer(self.__gameTimerId)
         self.__gameTimerId = None
         self.__failTimerId = self.startTimer(500)
@@ -347,7 +348,7 @@ class Controller(QObject):
         button.clicked.connect(lambda: self.__buttonClicked(button))
         self.__buttons.append(button)
         button.switchOn()
-        button.setText("Press to\nstart!")
+        button.setText("START")
 
     def __buttonClicked(self, button):
         self.__clickSoundEffect.play()
