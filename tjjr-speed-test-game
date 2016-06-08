@@ -20,6 +20,7 @@ import sys
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from PyQt5.QtMultimedia import *
 from PyQt5.QtWidgets import *
 
 max_misclicks = 6
@@ -291,6 +292,10 @@ class Controller(QObject):
         self.__gameTimerId  = None
         self.__misclicks    = 0
 
+        self.__clickSoundEffect = QSoundEffect()
+        self.__clickSoundEffect.setSource(QUrl.fromLocalFile("tick.wav"))
+        self.__clickSoundEffect.setVolume(0.25)
+
     def timerEvent(self, event):
         if event.timerId() == self.__failTimerId:
             self.__failTicks += 1
@@ -333,6 +338,8 @@ class Controller(QObject):
         button.setText("Press to\nstart!")
 
     def __buttonClicked(self, button):
+        self.__clickSoundEffect.play()
+
         if self.__failTimerId is not None:
             return
 
