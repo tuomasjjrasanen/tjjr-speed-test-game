@@ -300,6 +300,10 @@ class Controller(QObject):
         self.__gameOverSoundEffect.setSource(QUrl.fromLocalFile("horn.wav"))
         self.__gameOverSoundEffect.setVolume(0.25)
 
+        self.__levelSoundEffect = QSoundEffect()
+        self.__levelSoundEffect.setSource(QUrl.fromLocalFile("teaspoon.wav"))
+        self.__levelSoundEffect.setVolume(0.25)
+
     def timerEvent(self, event):
         if event.timerId() == self.__failTimerId:
             self.__failTicks += 1
@@ -324,6 +328,7 @@ class Controller(QObject):
         level, remainder = divmod(self.__scoreCounter.count(), 7)
         if remainder == 0 and level < len(Controller.TIMEOUTS):
             if level >= 1:
+                self.__levelSoundEffect.play()
                 self.__dashboard.advanceLevel(level)
             self.killTimer(self.__gameTimerId)
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
