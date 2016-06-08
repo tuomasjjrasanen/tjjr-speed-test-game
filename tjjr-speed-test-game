@@ -296,6 +296,10 @@ class Controller(QObject):
         self.__clickSoundEffect.setSource(QUrl.fromLocalFile("tick.wav"))
         self.__clickSoundEffect.setVolume(0.25)
 
+        self.__gameOverSoundEffect = QSoundEffect()
+        self.__gameOverSoundEffect.setSource(QUrl.fromLocalFile("horn.wav"))
+        self.__gameOverSoundEffect.setVolume(0.25)
+
     def timerEvent(self, event):
         if event.timerId() == self.__failTimerId:
             self.__failTicks += 1
@@ -325,6 +329,8 @@ class Controller(QObject):
             self.__gameTimerId = self.startTimer(Controller.TIMEOUTS[level])
 
     def __gameOver(self, failButton, reason):
+        self.__gameOverSoundEffect.play()
+
         self.__failButton = failButton
         self.__failButton.setText("%s\nGame over!" % reason)
         self.killTimer(self.__gameTimerId)
