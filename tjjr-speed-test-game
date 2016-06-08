@@ -299,7 +299,7 @@ class Controller(QObject):
         self.__clickSoundEffect.setVolume(0.25)
 
         self.__gameOverSoundEffect = QSoundEffect()
-        self.__gameOverSoundEffect.setSource(QUrl.fromLocalFile("horn.wav"))
+        self.__gameOverSoundEffect.setSource(QUrl.fromLocalFile("sad.wav"))
         self.__gameOverSoundEffect.setVolume(0.25)
 
         self.__levelSoundEffect = QSoundEffect()
