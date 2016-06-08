@@ -291,6 +291,7 @@ class Controller(QObject):
         self.__failTicks    = 0
         self.__failTimerId  = None
         self.__gameTimerId  = None
+        self.__steps        = 0
 
         self.__clickSoundEffect = QSoundEffect()
         self.__clickSoundEffect.setSource(QUrl.fromLocalFile("tick.wav"))
@@ -325,7 +326,7 @@ class Controller(QObject):
 
         self.__buttons[random.randrange(len(self.__buttons))].switchOn()
 
-        level, remainder = divmod(self.__scoreCounter.count(), 7)
+        level, remainder = divmod(self.__steps, 7)
         if remainder == 0 and level < len(Controller.TIMEOUTS):
             if level >= 1:
                 self.__levelSoundEffect.play()
@@ -364,6 +365,7 @@ class Controller(QObject):
 
         button.switchOff()
         self.__scoreCounter.increment()
+        self.__steps += 1
 
     def setDashboard(self, dashboard):
         self.__dashboard = dashboard
