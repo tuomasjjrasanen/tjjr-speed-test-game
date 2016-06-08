@@ -298,6 +298,10 @@ class Controller(QObject):
         self.__clickSoundEffect.setSource(QUrl.fromLocalFile("tick.wav"))
         self.__clickSoundEffect.setVolume(0.25)
 
+        self.__failSoundEffect = QSoundEffect()
+        self.__failSoundEffect.setSource(QUrl.fromLocalFile("fail.wav"))
+        self.__failSoundEffect.setVolume(0.25)
+
         self.__gameOverSoundEffect = QSoundEffect()
         self.__gameOverSoundEffect.setSource(QUrl.fromLocalFile("sad.wav"))
         self.__gameOverSoundEffect.setVolume(0.25)
@@ -351,19 +355,21 @@ class Controller(QObject):
         button.setText("START")
 
     def __buttonClicked(self, button):
-        self.__clickSoundEffect.play()
-
         if self.__failTimerId is not None:
+            self.__clickSoundEffect.play()
             return
 
         if self.__gameTimerId is None:
+            self.__clickSoundEffect.play()
             self.start()
             return
 
         if not button.isLit():
+            self.__failSoundEffect.play()
             self.__scoreCounter.decrement()
             return
 
+        self.__clickSoundEffect.play()
         button.switchOff()
         self.__scoreCounter.increment()
         self.__steps += 1
