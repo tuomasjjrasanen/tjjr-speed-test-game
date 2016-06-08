@@ -23,8 +23,6 @@ from PyQt5.QtGui import *
 from PyQt5.QtMultimedia import *
 from PyQt5.QtWidgets import *
 
-max_misclicks = 6
-
 class GraphicsGlowEffect(QGraphicsEffect):
 
     def __init__(self, color):
@@ -293,7 +291,6 @@ class Controller(QObject):
         self.__failTicks    = 0
         self.__failTimerId  = None
         self.__gameTimerId  = None
-        self.__misclicks    = 0
 
         self.__clickSoundEffect = QSoundEffect()
         self.__clickSoundEffect.setSource(QUrl.fromLocalFile("tick.wav"))
@@ -362,10 +359,7 @@ class Controller(QObject):
             return
 
         if not button.isLit():
-            self.__misclicks += 1
-            if self.__misclicks > max_misclicks:
-                button.switchOn()
-                self.__gameOver(button, "Too many\nmisclicks!")
+            self.__scoreCounter.decrement()
             return
 
         button.switchOff()
@@ -380,7 +374,6 @@ class Controller(QObject):
     def start(self):
         self.__dashboard.reset()
         self.__gameTimerId = self.startTimer(1000)
-        self.__misclicks = 0
         self.__failButton = None
         self.__failTicks = 0
 
