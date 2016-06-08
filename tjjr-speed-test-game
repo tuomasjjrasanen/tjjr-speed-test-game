@@ -18,8 +18,9 @@
 import random
 import sys
 
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 
 max_misclicks = 6
 
@@ -386,9 +387,9 @@ class MainWindow(QMainWindow):
 def main():
     app = QApplication(sys.argv)
 
-    if app.argc() > 1:
+    if len(sys.argv) > 1:
         error_message = "ERROR: invalid number of arguments ({}), expected 0"
-        print(error_message.format(app.argc() - 1), file=sys.stderr)
+        print(error_message.format(len(sys.argv) - 1), file=sys.stderr)
         return 1
 
     win = MainWindow()
