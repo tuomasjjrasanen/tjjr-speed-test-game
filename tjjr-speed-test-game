@@ -385,6 +385,7 @@ class Controller(QObject):
         self.__gameTimerId = self.startTimer(1000)
         self.__failButton = None
         self.__failTicks = 0
+        self.__steps = 0
 
 class MainWindow(QMainWindow):
 
